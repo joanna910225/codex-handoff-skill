@@ -33,7 +33,7 @@ The skill-only route does not install the global continuity rules or the reviewe
 ## Manual one-command install
 
 ```bash
-git clone git@github.com:joanna910225/codex-handoff-skill.git
+git clone https://github.com/joanna910225/codex-handoff-skill.git
 cd codex-handoff-skill
 ./install.sh
 ```
