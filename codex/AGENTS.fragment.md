@@ -1,0 +1,9 @@
+## Context continuity and handoff
+
+- Keep the main chat focused on orchestration, consequential decisions, integration, and final verification. Prefer bounded subagents for non-trivial separable exploration, implementation, verification, or review.
+- Choose the least expensive capable model explicitly instead of inheriting the main model: use `gpt-5.6-luna` for clear repeatable work, `gpt-5.6-terra` for everyday reasoning and tool use, `gpt-5.6-terra` with high effort for review, and `gpt-5.6-sol` only for genuinely ambiguous, difficult, or high-risk reasoning.
+- Automatically evaluate `CONTINUE`, `CHECKPOINT`, or `ROTATE` before each distinct new phase and whenever context pressure, compaction, forgetting, repeated work, stale assumptions, changed ownership, or model mismatch appears. Do not wait for the user to notice context degradation.
+- Use `$handoff` when the user requests a fresh thread or agent, or when context health, phase, interface, ownership, or agent profile has materially changed. Do not use it for routine status updates.
+- Every subagent must return a compact `Subagent Handoff` to its immediate parent, including delegated scope, status, verified outcomes, changed files, commands/results, assumptions/risks, parent verification, and one next action. Enforce the same rule recursively for child agents.
+- When the main agent rotates, collect subagent packets and move continuation to a fresh main chat. When a subagent rotates, it reports to the main agent; the main agent verifies the packet, closes the old writer, and spawns a fresh subagent. Never hand work directly from one subagent to another without main-agent acceptance.
+- Keep one active writer per directory or worktree. A destination agent must verify the handoff packet against the actual workspace before writing.

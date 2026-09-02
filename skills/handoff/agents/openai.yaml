@@ -1,0 +1,6 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Automatic context and phase handoff routing"
+  default_prompt: "Use $handoff to monitor context health, rotate main or subagent threads when warranted, and preserve verified continuity."
+policy:
+  allow_implicit_invocation: true
