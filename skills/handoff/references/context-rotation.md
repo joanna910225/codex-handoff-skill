@@ -41,14 +41,16 @@ Record the decision and its evidence. Do not silently rotate or silently ignore 
 
 ## Main-Agent Rotation
 
-1. Stop new mutations at a safe boundary.
+1. Stop new mutations at a safe boundary. Do not intentionally compact first; prepare the packet while the source context is still richest.
 2. Request and collect handoffs from active subagents. Mark missing packets unverified.
 3. Verify the workspace, changed files, branch/worktree state, and the most important evidence.
-4. Produce the full main `Handoff` packet, including phase transition, agent/model plan, all unresolved subagent states, and a destination validation sentinel.
-5. Release the old main agent's write ownership.
-6. If the active interface provides fresh-chat creation, start a new main chat with only the packet and necessary file references. Do not copy the entire transcript.
-7. If fresh-chat creation is unavailable, stop with the packet ready to paste and state that the user must open the new chat. Do not pretend a new main chat was created.
-8. The new main agent validates the packet before writing, then decides which fresh subagents are needed.
+4. Produce the full main `Handoff` packet, including phase transition, material decision lineage, safe access paths for prerequisites, authorization caps, agent/model plan, all unresolved subagent states, and a destination validation sentinel.
+5. Apply the readiness test from `SKILL.md`. A pointer to a local packet is sufficient only when the destination can access that path; otherwise include the packet in the destination prompt.
+6. Release the old main agent's write ownership. It may remain read-only long enough to verify the destination receipt.
+7. If the active interface provides fresh-chat creation, start a new main chat with only the packet and necessary file references. Do not copy the entire transcript.
+8. Require the destination to validate the packet and return a continuity receipt before it writes. If the receipt exposes a material omission that the predecessor can safely supply, send one evidence-based supplement; otherwise record the blocker instead of guessing.
+9. If fresh-chat creation is unavailable, stop with the packet ready to paste and state that the user must open the new chat. Do not pretend a new main chat was created.
+10. Complete the rotation only after the destination acknowledges the packet or the unresolved blocker is explicit.
 
 Main-agent rotation is a sequential ownership transfer, not two main chats writing in parallel.
 
